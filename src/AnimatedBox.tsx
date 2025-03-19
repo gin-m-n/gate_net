@@ -34,8 +34,7 @@ export const AnimatedBox = () => {
       lastToggleTime.current = clock.elapsedTime
     }
 
-    const gap = clock.elapsedTime - lastToggleTime.current;
-
+    const delta = clock.elapsedTime - lastToggleTime.current;
     if (isMoving.current) {
       const rate = (clock.elapsedTime - lastToggleTime.current) / MOVING_DURATION_SEC
       const rateValue = easeInOutBack(rate)
@@ -44,7 +43,7 @@ export const AnimatedBox = () => {
       meshRef.current.rotation.y = Math.PI / 180 * 45 + 2 * Math.PI * rateValue
       meshRef.current.rotation.z = 2 * Math.PI * rateValue
 
-      if (gap >= MOVING_DURATION_SEC) {
+      if (delta >= MOVING_DURATION_SEC) {
         isMoving.current = false
         lastToggleTime.current = clock.elapsedTime
       }
@@ -52,7 +51,7 @@ export const AnimatedBox = () => {
       prevRot.current.y = meshRef.current.rotation.y
       prevRot.current.z = meshRef.current.rotation.z
 
-      if (gap >= REST_DURATION_SEC) {
+      if (delta >= REST_DURATION_SEC) {
         isMoving.current = true
         lastToggleTime.current = clock.elapsedTime
       }
