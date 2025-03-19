@@ -18,7 +18,6 @@ function easeInOutBack(x: number): number {
 export const AnimatedBox = () => {
   const isMoving = useRef(true)
   const lastToggleTime = useRef(-1)
-  const prevRot = useRef({ y: 0, z: 0 })
   const meshRef = useRef<Mesh>(null)
   // const { size, pointer } = useThree()
 
@@ -48,9 +47,6 @@ export const AnimatedBox = () => {
         lastToggleTime.current = clock.elapsedTime
       }
     } else {
-      prevRot.current.y = meshRef.current.rotation.y
-      prevRot.current.z = meshRef.current.rotation.z
-
       if (delta >= REST_DURATION_SEC) {
         isMoving.current = true
         lastToggleTime.current = clock.elapsedTime
