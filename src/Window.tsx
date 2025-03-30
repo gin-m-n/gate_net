@@ -1,11 +1,12 @@
-import { useFrame, useThree } from "@react-three/fiber"
+import { useThree } from "@react-three/fiber"
 import { useRef } from "react"
 import { Mesh } from "three"
 
 type Props = {
   x: number,
   y: number,
-  z: number
+  z: number,
+  calcZ: () => number
 }
 
 export const Win = (props: Props) => {
@@ -14,11 +15,6 @@ export const Win = (props: Props) => {
 
   const winRef = useRef<Mesh>(null)
   const { size, pointer } = useThree()
-
-  useFrame(() => {
-    if (winRef.current == null) return
-
-  })
 
   return (
     <>
@@ -33,6 +29,9 @@ export const Win = (props: Props) => {
           const diffX = position.x - x
           const diffY = position.y - y
           diffCenterAndPointer.current = { x: diffX, y: diffY }
+
+          winRef.current.position.z = props.calcZ()
+
           isDragged.current = true
         }}
         onPointerUp={(e) => {

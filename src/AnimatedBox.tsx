@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber"
 import { useRef } from "react";
 import { Mesh } from "three";
 
-const BOX_SIZE = 300
+const BOX_SIZE = 100
 const MOVING_DURATION_SEC = 3
 const REST_DURATION_SEC = 1
 
@@ -57,7 +57,7 @@ export const AnimatedBox = () => {
 
   return (
     <mesh
-      position={[0, 0, -1000]}
+      position={[0, 0, -100]}
       ref={meshRef}>
       <boxGeometry args={[BOX_SIZE, BOX_SIZE, BOX_SIZE]} />
       <meshBasicMaterial color="royalblue" />
