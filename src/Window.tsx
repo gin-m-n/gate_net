@@ -1,12 +1,33 @@
-import { useThree } from "@react-three/fiber"
-import { useRef } from "react"
-import { Mesh } from "three"
+import { Text } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber"
+import { useRef } from "react";
+import { Mesh } from "three";
+import { CloseButton } from "./CloseButton";
+
+const padding = 2
+const rectSize = {
+  w: 300,
+  h: 200,
+}
+const headerSize = {
+  w: rectSize.w - padding * 2,
+  h: 30
+}
+const bodySize = {
+  w: rectSize.w - padding * 2,
+  h: rectSize.h - headerSize.h - padding * 2
+}
+
 
 type Props = {
-  x: number,
-  y: number,
-  z: number,
+  position: {
+    x: number,
+    y: number,
+    z: number,
+  }
   calcZ: () => number
+  text: string
+  onClose: () => void
 }
 
 export const Win = (props: Props) => {
@@ -15,6 +36,17 @@ export const Win = (props: Props) => {
 
   const winRef = useRef<Mesh>(null)
   const { size, pointer } = useThree()
+
+  useFrame(() => {
+    if (winRef.current == null) return
+    if (isDragged.current) {
+      const x = pointer.x * size.width / 2
+      const y = pointer.y * size.height / 2
+
+      winRef.current.position.x = x + diffCenterAndPointer.current.x
+      winRef.current.position.y = y + diffCenterAndPointer.current.y
+    }
+  })
 
   return (
     <>
@@ -28,40 +60,52 @@ export const Win = (props: Props) => {
           const { position } = winRef.current
           const diffX = position.x - x
           const diffY = position.y - y
+
           diffCenterAndPointer.current = { x: diffX, y: diffY }
-
           winRef.current.position.z = props.calcZ()
-
           isDragged.current = true
         }}
         onPointerUp={(e) => {
           e.stopPropagation()
           isDragged.current = false
         }}
-        onPointerLeave={(e) => {
-          e.stopPropagation()
-          isDragged.current = false
-        }}
-        onPointerMove={() => {
-          if (winRef.current == null) return
-          if (isDragged.current) {
-            const x = pointer.x * size.width / 2
-            const y = pointer.y * size.height / 2
-
-            winRef.current.position.x = x + diffCenterAndPointer.current.x
-            winRef.current.position.y = y + diffCenterAndPointer.current.y
-          }
-        }}
-        position={[props.x, props.y, props.z]}
+        position={[props.position.x, props.position.y, props.position.z]}
         ref={winRef}
       >
-        <planeGeometry args={[300, 200, 1,]} />
+        <planeGeometry args={[rectSize.w, rectSize.h, 1]} />
         <meshBasicMaterial color="white" />
-        <mesh>
-          <planeGeometry args={[300 - 10, 200 - 10, 1,]} />
-          <meshBasicMaterial color="black" />
+
+        {/* Header */}
+        <mesh position={[0, rectSize.h / 2 - headerSize.h / 2 - padding, 0]}>
+          <planeGeometry
+            args={[headerSize.w, headerSize.h, 1]}
+          />
+          <meshBasicMaterial color="blue" />
+          <Text
+            position={[-rectSize.w / 2 + padding * 2, 0, 0]}
+            font='/NotoSansJP-Regular.ttf'
+            anchorX="left"
+            fontSize={20}
+            color='white'
+          >
+            タイトル
+          </Text>
+          <CloseButton size={10} position={[rectSize.w / 2 - 10 - padding - 5, 0, 0]} onClick={props.onClose} />
         </mesh>
-      </mesh>
+
+        {/* Body */}
+        <mesh position={[0, rectSize.h / 2 - bodySize.h / 2 - padding - headerSize.h - padding / 2, 0]}>
+          <planeGeometry args={[bodySize.w, bodySize.h, 1]} />
+          <meshBasicMaterial color="black" />
+          <Text
+            font='/NotoSansJP-Regular.ttf'
+            fontSize={28}
+            color='white'
+          >
+            {props.text}
+          </Text>
+        </mesh>
+      </mesh >
     </>
   )
 }
