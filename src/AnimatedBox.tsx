@@ -19,15 +19,10 @@ export const AnimatedBox = () => {
   const isMoving = useRef(true)
   const lastToggleTime = useRef(-1)
   const meshRef = useRef<Mesh>(null)
-  // const { size, pointer } = useThree()
 
 
   useFrame(({ clock }) => {
     if (meshRef.current == null) return
-
-    // const { x, y } = pointer
-    // meshRef.current.position.x = x * size.width / 2
-    // meshRef.current.position.y = y * size.height / 2
 
     if (lastToggleTime.current === -1) {
       lastToggleTime.current = clock.elapsedTime
