@@ -1,17 +1,18 @@
 import { Canvas, } from '@react-three/fiber'
 import { AnimatedBox } from './AnimatedBox'
+import { WindowManager } from './WindowManager'
 
 
 const toRad = (deg: number) => deg * Math.PI / 180
 const fov = 60
-const dist = window.innerHeight / 2 / Math.tan(toRad(fov / 2))
+const dist = (window.innerHeight / 2) / Math.tan(toRad(fov / 2))
 
 function App() {
   return (
     <div id="canvas-container">
-      <Canvas camera={{ fov: fov, position: [0, 0, dist] }} >
+      <Canvas camera={{ fov: fov, position: [0, 0, dist], far: 10000 }} >
         <AnimatedBox />
-        <directionalLight args={['white', 1.5]} position={[0.5, 2, 1]} />
+        <WindowManager />
       </Canvas>
     </div>
   )
