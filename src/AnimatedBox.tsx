@@ -56,9 +56,11 @@ export const AnimatedBox = () => {
 
 
   return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[BOX_SIZE, BOX_SIZE, BOX_SIZE,]} />
-      <meshStandardMaterial color="royalblue" />
+    <mesh
+      position={[0, 0, -1000]}
+      ref={meshRef}>
+      <boxGeometry args={[BOX_SIZE, BOX_SIZE, BOX_SIZE]} />
+      <meshBasicMaterial color="royalblue" />
     </mesh>
   )
 }
