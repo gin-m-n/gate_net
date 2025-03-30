@@ -17,7 +17,7 @@ const bodySize = {
   w: rectSize.w - padding * 2,
   h: rectSize.h - headerSize.h - padding * 2
 }
-
+const fontSize = 16
 
 type Props = {
   position: {
@@ -26,7 +26,7 @@ type Props = {
     z: number,
   }
   calcZ: () => number
-  text: string
+  content: string
   onClose: () => void
 }
 
@@ -98,11 +98,20 @@ export const Win = (props: Props) => {
           <planeGeometry args={[bodySize.w, bodySize.h, 1]} />
           <meshBasicMaterial color="black" />
           <Text
+            position={[
+              -(rectSize.w / 2) + padding * 2,
+              bodySize.h / 2 - padding * 2,
+              0
+            ]}
             font='/NotoSansJP-Regular.ttf'
-            fontSize={28}
+            fontSize={fontSize}
             color='white'
+            anchorX="left"
+            anchorY="top"
+            overflowWrap="break-word"
+            maxWidth={rectSize.w - padding * 4}
           >
-            {props.text}
+            {props.content}
           </Text>
         </mesh>
       </mesh >
